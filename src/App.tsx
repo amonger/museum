@@ -41,12 +41,12 @@ function App() {
         </a-camera>
         
         {selectedImage && imageLoaded && (
-          <a-sphere 
+          <a-plane 
             stereo="src: #stereoImage"
-            geometry="radius: 5; segmentsWidth: 64; segmentsHeight: 32"
-            material="side: back; src: #stereoImage"
-            position="0 0 0"
-          ></a-sphere>
+            geometry="width: 8; height: 4.5"
+            material="src: #stereoImage"
+            position="0 1.6 -3"
+          ></a-plane>
         )}
         
         {!selectedImage && (

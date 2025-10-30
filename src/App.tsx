@@ -142,7 +142,7 @@ function App() {
           {rightEyeImages[currentImageIndex] && <img id="rightEyeImg" src={rightEyeImages[currentImageIndex]} />}
         </a-assets>
         
-        <a-camera position="0 1.6 3">
+        <a-camera position="0 1.6 0">
           <a-cursor animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"></a-cursor>
         </a-camera>
 
@@ -151,22 +151,71 @@ function App() {
         
         {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && imageLoaded && (
           <>
+            {/* Front Wall */}
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #leftEyeImg; transparent: true"
-              position="0 1.6 -3"
+              position="0 1.6 -5"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #rightEyeImg; transparent: true"
-              position="0 1.6 -3"
+              position="0 1.6 -5"
+              eye-filter="eye: right"
+            ></a-plane>
+            
+            {/* Back Wall */}
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #leftEyeImg; transparent: true"
+              position="0 1.6 5"
+              rotation="0 180 0"
+              eye-filter="eye: left"
+            ></a-plane>
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #rightEyeImg; transparent: true"
+              position="0 1.6 5"
+              rotation="0 180 0"
+              eye-filter="eye: right"
+            ></a-plane>
+            
+            {/* Left Wall */}
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #leftEyeImg; transparent: true"
+              position="-5 1.6 0"
+              rotation="0 90 0"
+              eye-filter="eye: left"
+            ></a-plane>
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #rightEyeImg; transparent: true"
+              position="-5 1.6 0"
+              rotation="0 90 0"
+              eye-filter="eye: right"
+            ></a-plane>
+            
+            {/* Right Wall */}
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #leftEyeImg; transparent: true"
+              position="5 1.6 0"
+              rotation="0 -90 0"
+              eye-filter="eye: left"
+            ></a-plane>
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #rightEyeImg; transparent: true"
+              position="5 1.6 0"
+              rotation="0 -90 0"
               eye-filter="eye: right"
             ></a-plane>
             
             <a-box 
               id="prevButton"
-              position="-3 1.6 -2.5" 
+              position="-1.5 1.0 -2" 
               geometry="width: 0.5; height: 0.3; depth: 0.1"
               material="color: #4CC3D9; opacity: 0.8"
               class="clickable"
@@ -184,7 +233,7 @@ function App() {
             
             <a-box 
               id="nextButton"
-              position="3 1.6 -2.5" 
+              position="1.5 1.0 -2" 
               geometry="width: 0.5; height: 0.3; depth: 0.1"
               material="color: #EF2D5E; opacity: 0.8"
               class="clickable"
@@ -202,7 +251,7 @@ function App() {
             
             <a-text 
               value={`${currentImageIndex + 1} / ${Math.max(leftEyeImages.length, rightEyeImages.length)}`}
-              position="0 0.8 -2.8"
+              position="0 0.5 -2"
               align="center"
               color="#FFF"
               scale="0.6 0.6 0.6"

@@ -2,17 +2,45 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [images, setImages] = useState<string[]>([
-    '/Illustration06-Palais-Royal-Shadows.jpg',
-    '/ilfracombe-the-new-hotel-37fc05-640.jpg',
-    '/blog-robbett-mary-kate-2018-04-05-stereograph-as-an-educator-loc-banner-edit.jpg',
-  ])
+  const [leftEyeImages, setLeftEyeImages] = useState<string[]>(['/l.jpg'])
+  const [rightEyeImages, setRightEyeImages] = useState<string[]>(['/r.jpg'])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
-    import('aframe-stereo-component')
-  }, [])
+    import('aframe-stereo-component').then(() => {
+      if (typeof window !== 'undefined' && window.AFRAME) {
+        window.AFRAME.registerComponent('eye-filter', {
+          schema: {
+            eye: { type: 'string', default: 'both' }
+          },
+          init: function () {
+            const eye = this.data.eye;
+            const sceneEl = this.el.sceneEl;
+            
+            const updateVisibility = () => {
+              const mesh = this.el.getObject3D('mesh');
+              if (mesh) {
+                if (sceneEl.is('vr-mode')) {
+                  if (eye === 'left') {
+                    mesh.layers.set(1);
+                  } else if (eye === 'right') {
+                    mesh.layers.set(2);
+                  }
+                } else {
+                  mesh.layers.set(0);
+                }
+              }
+            };
+            
+            this.el.addEventListener('object3dset', updateVisibility);
+            sceneEl.addEventListener('enter-vr', updateVisibility);
+            sceneEl.addEventListener('exit-vr', updateVisibility);
+          }
+        });
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const handleVRClick = (event: any) => {
@@ -26,14 +54,22 @@ function App() {
 
     document.addEventListener('click', handleVRClick)
     return () => document.removeEventListener('click', handleVRClick)
-  }, [images.length])
+  }, [leftEyeImages.length, rightEyeImages.length])
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+
+  const handleLeftEyeUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (files) {
       const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-      setImages(prev => [...prev, ...newImages])
-      setImageLoaded(false)
+      setLeftEyeImages(prev => [...prev, ...newImages])
+    }
+  }
+
+  const handleRightEyeUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files
+    if (files) {
+      const newImages = Array.from(files).map(file => URL.createObjectURL(file))
+      setRightEyeImages(prev => [...prev, ...newImages])
     }
   }
 
@@ -42,15 +78,17 @@ function App() {
   }
 
   const nextImage = () => {
-    if (images.length > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+    const maxLength = Math.max(leftEyeImages.length, rightEyeImages.length)
+    if (maxLength > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % maxLength)
       setImageLoaded(false)
     }
   }
 
   const prevImage = () => {
-    if (images.length > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+    const maxLength = Math.max(leftEyeImages.length, rightEyeImages.length)
+    if (maxLength > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + maxLength) % maxLength)
       setImageLoaded(false)
     }
   }
@@ -66,21 +104,29 @@ function App() {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [images.length])
+  }, [leftEyeImages.length, rightEyeImages.length])
+
+  useEffect(() => {
+    setImageLoaded(true)
+  }, [currentImageIndex, leftEyeImages, rightEyeImages])
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, background: 'rgba(255,255,255,0.9)', padding: 10, borderRadius: 5 }}>
-        <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
-        <div style={{ marginTop: 5, fontSize: 12 }}>
-          Upload side-by-side stereoscopic images
+        <div style={{ marginBottom: 10 }}>
+          <label style={{ display: 'block', fontSize: 12, marginBottom: 5 }}>Left Eye Images:</label>
+          <input type="file" accept="image/*" multiple onChange={handleLeftEyeUpload} />
         </div>
-        {images.length > 0 && (
+        <div style={{ marginBottom: 10 }}>
+          <label style={{ display: 'block', fontSize: 12, marginBottom: 5 }}>Right Eye Images:</label>
+          <input type="file" accept="image/*" multiple onChange={handleRightEyeUpload} />
+        </div>
+        {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && (
           <div style={{ marginTop: 10 }}>
             <button onClick={prevImage} style={{ marginRight: 5 }}>Previous</button>
             <button onClick={nextImage} style={{ marginRight: 10 }}>Next</button>
             <span style={{ fontSize: 12 }}>
-              {currentImageIndex + 1} of {images.length}
+              {currentImageIndex + 1} of {Math.max(leftEyeImages.length, rightEyeImages.length)}
             </span>
           </div>
         )}
@@ -92,23 +138,30 @@ function App() {
         embedded style={{ width: '100%', height: '100%' }}
       >
         <a-assets>
-          {images.length > 0 && <img id="stereoImage" src={images[currentImageIndex]} onLoad={handleImageLoad} />}
+          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg" src={leftEyeImages[currentImageIndex]} onLoad={handleImageLoad} />}
+          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg" src={rightEyeImages[currentImageIndex]} />}
         </a-assets>
         
-        <a-camera stereocam="eye: left" position="0 1.6 3">
+        <a-camera position="0 1.6 3">
           <a-cursor animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"></a-cursor>
         </a-camera>
 
         <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
         <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ccffcc"></a-entity>
         
-        {images.length > 0 && imageLoaded && (
+        {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && imageLoaded && (
           <>
             <a-plane 
-              stereo="src: #stereoImage"
               geometry="width: 8; height: 4.5"
-              material="src: #stereoImage"
+              material="src: #leftEyeImg; opacity: 0.5; transparent: true"
               position="0 1.6 -3"
+              eye-filter="eye: left"
+            ></a-plane>
+            <a-plane 
+              geometry="width: 8; height: 4.5"
+              material="src: #rightEyeImg; opacity: 0.5; transparent: true"
+              position="0 1.6 -3"
+              eye-filter="eye: right"
             ></a-plane>
             
             <a-box 
@@ -148,7 +201,7 @@ function App() {
             </a-box>
             
             <a-text 
-              value={`${currentImageIndex + 1} / ${images.length}`}
+              value={`${currentImageIndex + 1} / ${Math.max(leftEyeImages.length, rightEyeImages.length)}`}
               position="0 0.8 -2.8"
               align="center"
               color="#FFF"
@@ -157,10 +210,10 @@ function App() {
           </>
         )}
         
-        {images.length === 0 && (
+        {leftEyeImages.length === 0 && rightEyeImages.length === 0 && (
           <>
             <a-text 
-              value="Upload stereoscopic images to view in 3D"
+              value="Upload separate left and right eye images to view in 3D"
               position="0 2 -3"
               align="center"
               color="#FFF"

@@ -2,7 +2,11 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [selectedImage, setSelectedImage] = useState('')
+  const [images, setImages] = useState<string[]>([
+    '/Illustration06-Palais-Royal-Shadows.jpg',
+    '/blog-robbett-mary-kate-2018-04-05-stereograph-as-an-educator-loc-banner-edit.jpg'
+  ])
+  const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
 
   useEffect(() => {
@@ -10,10 +14,10 @@ function App() {
   }, [])
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0]
-    if (file) {
-      const url = URL.createObjectURL(file)
-      setSelectedImage(url)
+    const files = event.target.files
+    if (files) {
+      const newImages = Array.from(files).map(file => URL.createObjectURL(file))
+      setImages(prev => [...prev, ...newImages])
       setImageLoaded(false)
     }
   }
@@ -22,25 +26,61 @@ function App() {
     setImageLoaded(true)
   }
 
+  const nextImage = () => {
+    if (images.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length)
+      setImageLoaded(false)
+    }
+  }
+
+  const prevImage = () => {
+    if (images.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
+      setImageLoaded(false)
+    }
+  }
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'ArrowLeft') {
+        prevImage()
+      } else if (event.key === 'ArrowRight') {
+        nextImage()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => window.removeEventListener('keydown', handleKeyPress)
+  }, [images.length])
+
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
       <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1000, background: 'rgba(255,255,255,0.9)', padding: 10, borderRadius: 5 }}>
-        <input type="file" accept="image/*" onChange={handleImageUpload} />
+        <input type="file" accept="image/*" multiple onChange={handleImageUpload} />
         <div style={{ marginTop: 5, fontSize: 12 }}>
-          Upload a side-by-side stereoscopic image
+          Upload side-by-side stereoscopic images
         </div>
+        {images.length > 0 && (
+          <div style={{ marginTop: 10 }}>
+            <button onClick={prevImage} style={{ marginRight: 5 }}>Previous</button>
+            <button onClick={nextImage} style={{ marginRight: 10 }}>Next</button>
+            <span style={{ fontSize: 12 }}>
+              {currentImageIndex + 1} of {images.length}
+            </span>
+          </div>
+        )}
       </div>
       
       <a-scene background="color: #000" vr-mode-ui="enabled: true">
         <a-assets>
-          {selectedImage && <img id="stereoImage" src={selectedImage} onLoad={handleImageLoad} />}
+          {images.length > 0 && <img id="stereoImage" src={images[currentImageIndex]} onLoad={handleImageLoad} />}
         </a-assets>
         
         <a-camera stereocam="eye: left" position="0 1.6 3">
           <a-cursor animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"></a-cursor>
         </a-camera>
         
-        {selectedImage && imageLoaded && (
+        {images.length > 0 && imageLoaded && (
           <a-plane 
             stereo="src: #stereoImage"
             geometry="width: 8; height: 4.5"
@@ -49,10 +89,10 @@ function App() {
           ></a-plane>
         )}
         
-        {!selectedImage && (
+        {images.length === 0 && (
           <>
             <a-text 
-              value="Upload a stereoscopic image to view in 3D"
+              value="Upload stereoscopic images to view in 3D"
               position="0 2 -3"
               align="center"
               color="#FFF"

@@ -140,6 +140,12 @@ function App() {
         <a-assets>
           {leftEyeImages[currentImageIndex] && <img id="leftEyeImg" src={leftEyeImages[currentImageIndex]} onLoad={handleImageLoad} />}
           {rightEyeImages[currentImageIndex] && <img id="rightEyeImg" src={rightEyeImages[currentImageIndex]} />}
+          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg2" src={leftEyeImages[currentImageIndex]} />}
+          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg2" src={rightEyeImages[currentImageIndex]} />}
+          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg3" src={leftEyeImages[currentImageIndex]} />}
+          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg3" src={rightEyeImages[currentImageIndex]} />}
+          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg4" src={leftEyeImages[currentImageIndex]} />}
+          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg4" src={rightEyeImages[currentImageIndex]} />}
         </a-assets>
         
         <a-camera position="0 1.6 0">
@@ -168,14 +174,14 @@ function App() {
             {/* Back Wall */}
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #leftEyeImg; transparent: true"
+              material="src: #leftEyeImg2; transparent: true"
               position="0 1.6 5"
               rotation="0 180 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #rightEyeImg; transparent: true"
+              material="src: #rightEyeImg2; transparent: true"
               position="0 1.6 5"
               rotation="0 180 0"
               eye-filter="eye: right"
@@ -184,14 +190,14 @@ function App() {
             {/* Left Wall */}
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #leftEyeImg; transparent: true"
+              material="src: #leftEyeImg3; transparent: true"
               position="-5 1.6 0"
               rotation="0 90 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #rightEyeImg; transparent: true"
+              material="src: #rightEyeImg3; transparent: true"
               position="-5 1.6 0"
               rotation="0 90 0"
               eye-filter="eye: right"
@@ -200,14 +206,14 @@ function App() {
             {/* Right Wall */}
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #leftEyeImg; transparent: true"
+              material="src: #leftEyeImg4; transparent: true"
               position="5 1.6 0"
               rotation="0 -90 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #rightEyeImg; transparent: true"
+              material="src: #rightEyeImg4; transparent: true"
               position="5 1.6 0"
               rotation="0 -90 0"
               eye-filter="eye: right"

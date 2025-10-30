@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/aframe": "^1.2.9",
+    "aframe": "^1.7.1",
+    "aframe-stereo-component": "^1.4.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },

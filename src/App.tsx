@@ -4,7 +4,8 @@ import './App.css'
 function App() {
   const [images, setImages] = useState<string[]>([
     '/Illustration06-Palais-Royal-Shadows.jpg',
-    '/blog-robbett-mary-kate-2018-04-05-stereograph-as-an-educator-loc-banner-edit.jpg'
+    '/ilfracombe-the-new-hotel-37fc05-640.jpg',
+    '/blog-robbett-mary-kate-2018-04-05-stereograph-as-an-educator-loc-banner-edit.jpg',
   ])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -12,6 +13,20 @@ function App() {
   useEffect(() => {
     import('aframe-stereo-component')
   }, [])
+
+  useEffect(() => {
+    const handleVRClick = (event: any) => {
+      const target = event.target
+      if (target.id === 'prevButton') {
+        prevImage()
+      } else if (target.id === 'nextButton') {
+        nextImage()
+      }
+    }
+
+    document.addEventListener('click', handleVRClick)
+    return () => document.removeEventListener('click', handleVRClick)
+  }, [images.length])
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
@@ -71,7 +86,11 @@ function App() {
         )}
       </div>
       
-      <a-scene background="color: #000" vr-mode-ui="enabled: true">
+      <a-scene 
+        background="color: #000" 
+        vr-mode-ui="enabled: true"
+        embedded style={{ width: '100%', height: '100%' }}
+      >
         <a-assets>
           {images.length > 0 && <img id="stereoImage" src={images[currentImageIndex]} onLoad={handleImageLoad} />}
         </a-assets>
@@ -79,14 +98,63 @@ function App() {
         <a-camera stereocam="eye: left" position="0 1.6 3">
           <a-cursor animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"></a-cursor>
         </a-camera>
+
+        <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
+        <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ccffcc"></a-entity>
         
         {images.length > 0 && imageLoaded && (
-          <a-plane 
-            stereo="src: #stereoImage"
-            geometry="width: 8; height: 4.5"
-            material="src: #stereoImage"
-            position="0 1.6 -3"
-          ></a-plane>
+          <>
+            <a-plane 
+              stereo="src: #stereoImage"
+              geometry="width: 8; height: 4.5"
+              material="src: #stereoImage"
+              position="0 1.6 -3"
+            ></a-plane>
+            
+            <a-box 
+              id="prevButton"
+              position="-3 1.6 -2.5" 
+              geometry="width: 0.5; height: 0.3; depth: 0.1"
+              material="color: #4CC3D9; opacity: 0.8"
+              class="clickable"
+              animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200"
+              animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200"
+            >
+              <a-text 
+                value="◀ PREV" 
+                position="0 0 0.06" 
+                align="center" 
+                color="#FFF"
+                scale="0.8 0.8 0.8"
+              ></a-text>
+            </a-box>
+            
+            <a-box 
+              id="nextButton"
+              position="3 1.6 -2.5" 
+              geometry="width: 0.5; height: 0.3; depth: 0.1"
+              material="color: #EF2D5E; opacity: 0.8"
+              class="clickable"
+              animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200"
+              animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200"
+            >
+              <a-text 
+                value="NEXT ▶" 
+                position="0 0 0.06" 
+                align="center" 
+                color="#FFF"
+                scale="0.8 0.8 0.8"
+              ></a-text>
+            </a-box>
+            
+            <a-text 
+              value={`${currentImageIndex + 1} / ${images.length}`}
+              position="0 0.8 -2.8"
+              align="center"
+              color="#FFF"
+              scale="0.6 0.6 0.6"
+            ></a-text>
+          </>
         )}
         
         {images.length === 0 && (

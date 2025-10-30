@@ -153,13 +153,13 @@ function App() {
           <>
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #leftEyeImg; opacity: 0.5; transparent: true"
+              material="src: #leftEyeImg; transparent: true"
               position="0 1.6 -3"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
-              material="src: #rightEyeImg; opacity: 0.5; transparent: true"
+              material="src: #rightEyeImg; transparent: true"
               position="0 1.6 -3"
               eye-filter="eye: right"
             ></a-plane>

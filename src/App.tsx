@@ -164,13 +164,15 @@ function App() {
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #leftEyeImg; transparent: true"
-              position="0 2 5"
+              position="10 2.5 5"
+              rotation="0 -45 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #rightEyeImg; transparent: true"
-              position="0 2 5"
+              position="10 2.5 5"
+              rotation="0 -45 0"
               eye-filter="eye: right"
             ></a-plane>
             
@@ -178,13 +180,15 @@ function App() {
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #leftEyeImg2; transparent: true"
-              position="0 2 15"
+              position="-10 2.5 15"
+              rotation="0 45 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #rightEyeImg2; transparent: true"
-              position="0 2 15"
+              position="-10 2.5 15"
+              rotation="0 45 0"
               eye-filter="eye: right"
             ></a-plane>
             
@@ -192,13 +196,15 @@ function App() {
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #leftEyeImg3; transparent: true"
-              position="0 2 25"
+              position="12 2.5 25"
+              rotation="0 -50 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #rightEyeImg3; transparent: true"
-              position="0 2 25"
+              position="12 2.5 25"
+              rotation="0 -50 0"
               eye-filter="eye: right"
             ></a-plane>
             
@@ -206,13 +212,15 @@ function App() {
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #leftEyeImg4; transparent: true"
-              position="0 2 35"
+              position="-12 2.5 35"
+              rotation="0 50 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 12; height: 8"
               material="src: #rightEyeImg4; transparent: true"
-              position="0 2 35"
+              position="-12 2.5 35"
+              rotation="0 50 0"
               eye-filter="eye: right"
             ></a-plane>
             

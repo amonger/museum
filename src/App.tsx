@@ -219,41 +219,7 @@ function App() {
               eye-filter="eye: right"
             ></a-plane>
             
-            <a-box 
-              id="prevButton"
-              position="-1.5 1.0 -2" 
-              geometry="width: 0.5; height: 0.3; depth: 0.1"
-              material="color: #4CC3D9; opacity: 0.8"
-              class="clickable"
-              animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200"
-              animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200"
-            >
-              <a-text 
-                value="◀ PREV" 
-                position="0 0 0.06" 
-                align="center" 
-                color="#FFF"
-                scale="0.8 0.8 0.8"
-              ></a-text>
-            </a-box>
-            
-            <a-box 
-              id="nextButton"
-              position="1.5 1.0 -2" 
-              geometry="width: 0.5; height: 0.3; depth: 0.1"
-              material="color: #EF2D5E; opacity: 0.8"
-              class="clickable"
-              animation__mouseenter="property: scale; to: 1.1 1.1 1.1; startEvents: mouseenter; dur: 200"
-              animation__mouseleave="property: scale; to: 1 1 1; startEvents: mouseleave; dur: 200"
-            >
-              <a-text 
-                value="NEXT ▶" 
-                position="0 0 0.06" 
-                align="center" 
-                color="#FFF"
-                scale="0.8 0.8 0.8"
-              ></a-text>
-            </a-box>
+       
             
             <a-text 
               value={`${currentImageIndex + 1} / ${Math.max(leftEyeImages.length, rightEyeImages.length)}`}

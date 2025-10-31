@@ -148,129 +148,97 @@ function App() {
           {rightEyeImages[currentImageIndex] && <img id="rightEyeImg4" src={rightEyeImages[currentImageIndex]} />}
         </a-assets>
         
-        <a-camera position="0 1.6 0">
-        </a-camera>
+        <a-entity 
+          id="cameraRig"
+          position="0 0 0"
+          animation="property: position; to: 0 1 50; dur: 15000; easing: linear; loop: true; autoplay: true"
+        >
+          <a-camera position="0 1.6 0"></a-camera>
+        </a-entity>
 
         <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
         <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ccffcc"></a-entity>
         
         {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && imageLoaded && (
           <>
-            {/* Front Wall */}
+            {/* Image Station 1 */}
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #leftEyeImg; transparent: true"
-              position="0 1.6 -8"
+              position="0 2 5"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #rightEyeImg; transparent: true"
-              position="0 1.6 -8"
+              position="0 2 5"
               eye-filter="eye: right"
             ></a-plane>
             
-            {/* Back Wall */}
+            {/* Image Station 2 */}
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #leftEyeImg2; transparent: true"
-              position="0 1.6 8"
-              rotation="0 180 0"
+              position="0 2 15"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #rightEyeImg2; transparent: true"
-              position="0 1.6 8"
-              rotation="0 180 0"
+              position="0 2 15"
               eye-filter="eye: right"
             ></a-plane>
             
-            {/* Left Wall */}
+            {/* Image Station 3 */}
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #leftEyeImg3; transparent: true"
-              position="-8 1.6 0"
-              rotation="0 90 0"
+              position="0 2 25"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #rightEyeImg3; transparent: true"
-              position="-8 1.6 0"
-              rotation="0 90 0"
+              position="0 2 25"
               eye-filter="eye: right"
             ></a-plane>
             
-            {/* Right Wall */}
+            {/* Image Station 4 */}
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #leftEyeImg4; transparent: true"
-              position="8 1.6 0"
-              rotation="0 -90 0"
+              position="0 2 35"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
-              geometry="width: 8; height: 4.5"
+              geometry="width: 12; height: 8"
               material="src: #rightEyeImg4; transparent: true"
-              position="8 1.6 0"
-              rotation="0 -90 0"
+              position="0 2 35"
               eye-filter="eye: right"
             ></a-plane>
             
-            {/* Environment: Floor, Ceiling, and Walls */}
+            {/* Rollercoaster Track Environment */}
             <a-plane 
-              position="0 0 0" 
+              position="0 0 25" 
               rotation="-90 0 0" 
-              width="20" 
-              height="20" 
+              width="10" 
+              height="100" 
               color="#404040"
               material="roughness: 0.8"
             ></a-plane>
             
-            <a-plane 
-              position="0 6 0" 
-              rotation="90 0 0" 
-              width="20" 
-              height="20" 
-              color="#202020"
-              material="roughness: 0.9"
-            ></a-plane>
+            {/* Sky/Background */}
+            <a-sky color="#87CEEB"></a-sky>
             
-            <a-plane 
-              position="0 3 -10" 
-              width="20" 
-              height="6" 
-              color="#303030"
-              material="roughness: 0.7"
-            ></a-plane>
-            
-            <a-plane 
-              position="0 3 10" 
-              rotation="0 180 0"
-              width="20" 
-              height="6" 
-              color="#303030"
-              material="roughness: 0.7"
-            ></a-plane>
-            
-            <a-plane 
-              position="-10 3 0" 
-              rotation="0 90 0"
-              width="20" 
-              height="6" 
-              color="#303030"
-              material="roughness: 0.7"
-            ></a-plane>
-            
-            <a-plane 
-              position="10 3 0" 
-              rotation="0 -90 0"
-              width="20" 
-              height="6" 
-              color="#303030"
-              material="roughness: 0.7"
-            ></a-plane>
+            {/* Support pillars for rollercoaster */}
+            <a-cylinder position="-2 0.5 10" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="2 0.5 10" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="-2 0.5 20" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="2 0.5 20" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="-2 0.5 30" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="2 0.5 30" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="-2 0.5 40" radius="0.1" height="1" color="#666"></a-cylinder>
+            <a-cylinder position="2 0.5 40" radius="0.1" height="1" color="#666"></a-cylinder>
          
           </>
         )}

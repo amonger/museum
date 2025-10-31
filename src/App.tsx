@@ -153,11 +153,10 @@ function App() {
           position="0 0 40"
           animation="property: position; to: 0 1 -10; dur: 30000; easing: linear; loop: true; autoplay: true"
         >
-          <a-camera position="0 1.6 0"></a-camera>
+          <a-camera position="0 2.5 0"></a-camera>
         </a-entity>
 
-        <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
-        <a-entity id="rightHand" hand-controls="hand: right; handModelStyle: lowPoly; color: #ccffcc"></a-entity>
+    
         
         {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && imageLoaded && (
           <>
@@ -217,29 +216,11 @@ function App() {
               eye-filter="eye: right"
             ></a-plane>
             
-            {/* Rollercoaster Track Environment */}
-            <a-plane 
-              position="0 0 25" 
-              rotation="-90 0 0" 
-              width="10" 
-              height="100" 
-              color="#404040"
-              material="roughness: 0.8"
-            ></a-plane>
-            
+    
             {/* Sky/Background */}
             <a-sky color="#87CEEB"></a-sky>
             
-            {/* Support pillars for rollercoaster */}
-            <a-cylinder position="-2 0.5 10" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="2 0.5 10" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="-2 0.5 20" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="2 0.5 20" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="-2 0.5 30" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="2 0.5 30" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="-2 0.5 40" radius="0.1" height="1" color="#666"></a-cylinder>
-            <a-cylinder position="2 0.5 40" radius="0.1" height="1" color="#666"></a-cylinder>
-         
+        
           </>
         )}
         

@@ -9,6 +9,9 @@ interface StereoPair {
 function App() {
   const [stereoPairs, setStereoPairs] = useState<StereoPair[]>([
     { left: '/woman/left.jpeg', right: '/woman/right.jpeg' },
+    { left: '/harbour/left.jpeg', right: '/harbour/right.jpeg' },
+    { left: '/harbour2/left.jpeg', right: '/harbour2/right.jpeg' },
+    { left: '/harbour3/left.jpeg', right: '/harbour3/right.jpeg' },
     { left: '/park/left.jpeg', right: '/park/right.jpeg' },
   ])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)

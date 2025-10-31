@@ -150,8 +150,8 @@ function App() {
         
         <a-entity 
           id="cameraRig"
-          position="0 0 0"
-          animation="property: position; to: 0 1 50; dur: 15000; easing: linear; loop: true; autoplay: true"
+          position="0 0 40"
+          animation="property: position; to: 0 1 -10; dur: 30000; easing: linear; loop: true; autoplay: true"
         >
           <a-camera position="0 1.6 0"></a-camera>
         </a-entity>

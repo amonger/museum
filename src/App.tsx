@@ -149,7 +149,6 @@ function App() {
         </a-assets>
         
         <a-camera position="0 1.6 0">
-          <a-cursor animation__click="property: scale; startEvents: click; from: 0.1 0.1 0.1; to: 1 1 1; dur: 150"></a-cursor>
         </a-camera>
 
         <a-entity id="leftHand" hand-controls="hand: left; handModelStyle: lowPoly; color: #ffcccc"></a-entity>
@@ -220,14 +219,7 @@ function App() {
             ></a-plane>
             
        
-            
-            <a-text 
-              value={`${currentImageIndex + 1} / ${Math.max(leftEyeImages.length, rightEyeImages.length)}`}
-              position="0 0.5 -2"
-              align="center"
-              color="#FFF"
-              scale="0.6 0.6 0.6"
-            ></a-text>
+         
           </>
         )}
         

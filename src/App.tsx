@@ -160,13 +160,13 @@ function App() {
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #leftEyeImg; transparent: true"
-              position="0 1.6 -5"
+              position="0 1.6 -8"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #rightEyeImg; transparent: true"
-              position="0 1.6 -5"
+              position="0 1.6 -8"
               eye-filter="eye: right"
             ></a-plane>
             
@@ -174,14 +174,14 @@ function App() {
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #leftEyeImg2; transparent: true"
-              position="0 1.6 5"
+              position="0 1.6 8"
               rotation="0 180 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #rightEyeImg2; transparent: true"
-              position="0 1.6 5"
+              position="0 1.6 8"
               rotation="0 180 0"
               eye-filter="eye: right"
             ></a-plane>
@@ -190,14 +190,14 @@ function App() {
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #leftEyeImg3; transparent: true"
-              position="-5 1.6 0"
+              position="-8 1.6 0"
               rotation="0 90 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #rightEyeImg3; transparent: true"
-              position="-5 1.6 0"
+              position="-8 1.6 0"
               rotation="0 90 0"
               eye-filter="eye: right"
             ></a-plane>
@@ -206,19 +206,71 @@ function App() {
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #leftEyeImg4; transparent: true"
-              position="5 1.6 0"
+              position="8 1.6 0"
               rotation="0 -90 0"
               eye-filter="eye: left"
             ></a-plane>
             <a-plane 
               geometry="width: 8; height: 4.5"
               material="src: #rightEyeImg4; transparent: true"
-              position="5 1.6 0"
+              position="8 1.6 0"
               rotation="0 -90 0"
               eye-filter="eye: right"
             ></a-plane>
             
-       
+            {/* Environment: Floor, Ceiling, and Walls */}
+            <a-plane 
+              position="0 0 0" 
+              rotation="-90 0 0" 
+              width="20" 
+              height="20" 
+              color="#404040"
+              material="roughness: 0.8"
+            ></a-plane>
+            
+            <a-plane 
+              position="0 6 0" 
+              rotation="90 0 0" 
+              width="20" 
+              height="20" 
+              color="#202020"
+              material="roughness: 0.9"
+            ></a-plane>
+            
+            <a-plane 
+              position="0 3 -10" 
+              width="20" 
+              height="6" 
+              color="#303030"
+              material="roughness: 0.7"
+            ></a-plane>
+            
+            <a-plane 
+              position="0 3 10" 
+              rotation="0 180 0"
+              width="20" 
+              height="6" 
+              color="#303030"
+              material="roughness: 0.7"
+            ></a-plane>
+            
+            <a-plane 
+              position="-10 3 0" 
+              rotation="0 90 0"
+              width="20" 
+              height="6" 
+              color="#303030"
+              material="roughness: 0.7"
+            ></a-plane>
+            
+            <a-plane 
+              position="10 3 0" 
+              rotation="0 -90 0"
+              width="20" 
+              height="6" 
+              color="#303030"
+              material="roughness: 0.7"
+            ></a-plane>
          
           </>
         )}

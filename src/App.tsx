@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './App.css'
 
 interface StereoPair {
@@ -8,7 +8,8 @@ interface StereoPair {
 
 function App() {
   const [stereoPairs, setStereoPairs] = useState<StereoPair[]>([
-    { left: '/left.jpeg', right: 'right.jpeg' }
+    { left: '/woman/left.jpeg', right: '/woman/right.jpeg' },
+    { left: '/park/left.jpeg', right: '/park/right.jpeg' },
   ])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
@@ -164,20 +165,18 @@ function App() {
         embedded style={{ width: '100%', height: '100%' }}
       >
         <a-assets>
-          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg" src={stereoPairs[currentImageIndex].left} onLoad={handleImageLoad} />}
-          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg" src={stereoPairs[currentImageIndex].right} />}
-          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg2" src={stereoPairs[currentImageIndex].left} />}
-          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg2" src={stereoPairs[currentImageIndex].right} />}
-          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg3" src={stereoPairs[currentImageIndex].left} />}
-          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg3" src={stereoPairs[currentImageIndex].right} />}
-          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg4" src={stereoPairs[currentImageIndex].left} />}
-          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg4" src={stereoPairs[currentImageIndex].right} />}
+          {stereoPairs.map((pair, index) => (
+            <React.Fragment key={index}>
+              {pair.left && <img id={`leftEyeImg${index}`} src={pair.left} onLoad={index === 0 ? handleImageLoad : undefined} />}
+              {pair.right && <img id={`rightEyeImg${index}`} src={pair.right} />}
+            </React.Fragment>
+          ))}
         </a-assets>
         
         <a-entity 
           id="cameraRig"
-          position="0 0 40"
-          animation="property: position; to: 0 1 -10; dur: 30000; easing: linear; loop: true; autoplay: true"
+          position={`0 0 ${stereoPairs.length > 0 ? 5 + (stereoPairs.length * 10) + 10 : 40}`}
+          animation={`property: position; to: 0 1 -10; dur: ${Math.max(30000, stereoPairs.length * 7500)}; easing: linear; loop: true; autoplay: true`}
         >
           <a-camera position="0 2.5 0"></a-camera>
         </a-entity>
@@ -186,73 +185,39 @@ function App() {
         
         {stereoPairs.length > 0 && imageLoaded && (
           <>
-            {/* Image Station 1 */}
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #leftEyeImg; transparent: true"
-              position="10 2.5 5"
-              rotation="0 -45 0"
-              eye-filter="eye: left"
-            ></a-plane>
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #rightEyeImg; transparent: true"
-              position="10 2.5 5"
-              rotation="0 -45 0"
-              eye-filter="eye: right"
-            ></a-plane>
-            
-            {/* Image Station 2 */}
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #leftEyeImg2; transparent: true"
-              position="-10 2.5 15"
-              rotation="0 45 0"
-              eye-filter="eye: left"
-            ></a-plane>
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #rightEyeImg2; transparent: true"
-              position="-10 2.5 15"
-              rotation="0 45 0"
-              eye-filter="eye: right"
-            ></a-plane>
-            
-            {/* Image Station 3 */}
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #leftEyeImg3; transparent: true"
-              position="12 2.5 25"
-              rotation="0 -50 0"
-              eye-filter="eye: left"
-            ></a-plane>
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #rightEyeImg3; transparent: true"
-              position="12 2.5 25"
-              rotation="0 -50 0"
-              eye-filter="eye: right"
-            ></a-plane>
-            
-            {/* Image Station 4 */}
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #leftEyeImg4; transparent: true"
-              position="-12 2.5 35"
-              rotation="0 50 0"
-              eye-filter="eye: left"
-            ></a-plane>
-            <a-plane 
-              geometry="width: 12; height: 8"
-              material="src: #rightEyeImg4; transparent: true"
-              position="-12 2.5 35"
-              rotation="0 50 0"
-              eye-filter="eye: right"
-            ></a-plane>
+            {stereoPairs.map((pair, index) => {
+              const zPos = 5 + (index * 10)
+              const isEven = index % 2 === 0
+              const xPos = isEven ? 10 + (index * 2) : -(10 + (index * 2))
+              const rotation = isEven ? -45 - (index * 5) : 45 + (index * 5)
+              
+              return (
+                <React.Fragment key={index}>
+                  {pair.left && (
+                    <a-plane 
+                      geometry="width: 12; height: 8"
+                      material={`src: #leftEyeImg${index}; transparent: true`}
+                      position={`${xPos} 2.5 ${zPos}`}
+                      rotation={`0 ${rotation} 0`}
+                      eye-filter="eye: left"
+                    ></a-plane>
+                  )}
+                  {pair.right && (
+                    <a-plane 
+                      geometry="width: 12; height: 8"
+                      material={`src: #rightEyeImg${index}; transparent: true`}
+                      position={`${xPos} 2.5 ${zPos}`}
+                      rotation={`0 ${rotation} 0`}
+                      eye-filter="eye: right"
+                    ></a-plane>
+                  )}
+                </React.Fragment>
+              )
+            })}
             
     
             {/* Sky/Background */}
-            <a-sky color="#87CEEB"></a-sky>
+            <a-sky color="#232d31ff"></a-sky>
             
         
           </>

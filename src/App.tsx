@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
+interface StereoPair {
+  left: string
+  right: string
+}
+
 function App() {
-  const [leftEyeImages, setLeftEyeImages] = useState<string[]>(['/left.jpeg'])
-  const [rightEyeImages, setRightEyeImages] = useState<string[]>(['right.jpeg'])
+  const [stereoPairs, setStereoPairs] = useState<StereoPair[]>([
+    { left: '/left.jpeg', right: 'right.jpeg' }
+  ])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
 
@@ -54,14 +60,25 @@ function App() {
 
     document.addEventListener('click', handleVRClick)
     return () => document.removeEventListener('click', handleVRClick)
-  }, [leftEyeImages.length, rightEyeImages.length])
+  }, [stereoPairs.length])
 
 
   const handleLeftEyeUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
     if (files) {
       const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-      setLeftEyeImages(prev => [...prev, ...newImages])
+      newImages.forEach((imageUrl, index) => {
+        setStereoPairs(prev => {
+          const newPairs = [...prev]
+          const targetIndex = prev.length + index
+          if (newPairs[targetIndex]) {
+            newPairs[targetIndex] = { ...newPairs[targetIndex], left: imageUrl }
+          } else {
+            newPairs[targetIndex] = { left: imageUrl, right: '' }
+          }
+          return newPairs
+        })
+      })
     }
   }
 
@@ -69,7 +86,18 @@ function App() {
     const files = event.target.files
     if (files) {
       const newImages = Array.from(files).map(file => URL.createObjectURL(file))
-      setRightEyeImages(prev => [...prev, ...newImages])
+      newImages.forEach((imageUrl, index) => {
+        setStereoPairs(prev => {
+          const newPairs = [...prev]
+          const targetIndex = prev.length + index
+          if (newPairs[targetIndex]) {
+            newPairs[targetIndex] = { ...newPairs[targetIndex], right: imageUrl }
+          } else {
+            newPairs[targetIndex] = { left: '', right: imageUrl }
+          }
+          return newPairs
+        })
+      })
     }
   }
 
@@ -78,17 +106,15 @@ function App() {
   }
 
   const nextImage = () => {
-    const maxLength = Math.max(leftEyeImages.length, rightEyeImages.length)
-    if (maxLength > 0) {
-      setCurrentImageIndex((prev) => (prev + 1) % maxLength)
+    if (stereoPairs.length > 0) {
+      setCurrentImageIndex((prev) => (prev + 1) % stereoPairs.length)
       setImageLoaded(false)
     }
   }
 
   const prevImage = () => {
-    const maxLength = Math.max(leftEyeImages.length, rightEyeImages.length)
-    if (maxLength > 0) {
-      setCurrentImageIndex((prev) => (prev - 1 + maxLength) % maxLength)
+    if (stereoPairs.length > 0) {
+      setCurrentImageIndex((prev) => (prev - 1 + stereoPairs.length) % stereoPairs.length)
       setImageLoaded(false)
     }
   }
@@ -104,11 +130,11 @@ function App() {
 
     window.addEventListener('keydown', handleKeyPress)
     return () => window.removeEventListener('keydown', handleKeyPress)
-  }, [leftEyeImages.length, rightEyeImages.length])
+  }, [stereoPairs.length])
 
   useEffect(() => {
     setImageLoaded(true)
-  }, [currentImageIndex, leftEyeImages, rightEyeImages])
+  }, [currentImageIndex, stereoPairs])
 
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
@@ -121,12 +147,12 @@ function App() {
           <label style={{ display: 'block', fontSize: 12, marginBottom: 5 }}>Right Eye Images:</label>
           <input type="file" accept="image/*" multiple onChange={handleRightEyeUpload} />
         </div>
-        {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && (
+        {stereoPairs.length > 0 && (
           <div style={{ marginTop: 10 }}>
             <button onClick={prevImage} style={{ marginRight: 5 }}>Previous</button>
             <button onClick={nextImage} style={{ marginRight: 10 }}>Next</button>
             <span style={{ fontSize: 12 }}>
-              {currentImageIndex + 1} of {Math.max(leftEyeImages.length, rightEyeImages.length)}
+              {currentImageIndex + 1} of {stereoPairs.length}
             </span>
           </div>
         )}
@@ -138,14 +164,14 @@ function App() {
         embedded style={{ width: '100%', height: '100%' }}
       >
         <a-assets>
-          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg" src={leftEyeImages[currentImageIndex]} onLoad={handleImageLoad} />}
-          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg" src={rightEyeImages[currentImageIndex]} />}
-          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg2" src={leftEyeImages[currentImageIndex]} />}
-          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg2" src={rightEyeImages[currentImageIndex]} />}
-          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg3" src={leftEyeImages[currentImageIndex]} />}
-          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg3" src={rightEyeImages[currentImageIndex]} />}
-          {leftEyeImages[currentImageIndex] && <img id="leftEyeImg4" src={leftEyeImages[currentImageIndex]} />}
-          {rightEyeImages[currentImageIndex] && <img id="rightEyeImg4" src={rightEyeImages[currentImageIndex]} />}
+          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg" src={stereoPairs[currentImageIndex].left} onLoad={handleImageLoad} />}
+          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg" src={stereoPairs[currentImageIndex].right} />}
+          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg2" src={stereoPairs[currentImageIndex].left} />}
+          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg2" src={stereoPairs[currentImageIndex].right} />}
+          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg3" src={stereoPairs[currentImageIndex].left} />}
+          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg3" src={stereoPairs[currentImageIndex].right} />}
+          {stereoPairs[currentImageIndex]?.left && <img id="leftEyeImg4" src={stereoPairs[currentImageIndex].left} />}
+          {stereoPairs[currentImageIndex]?.right && <img id="rightEyeImg4" src={stereoPairs[currentImageIndex].right} />}
         </a-assets>
         
         <a-entity 
@@ -158,7 +184,7 @@ function App() {
 
     
         
-        {(leftEyeImages.length > 0 || rightEyeImages.length > 0) && imageLoaded && (
+        {stereoPairs.length > 0 && imageLoaded && (
           <>
             {/* Image Station 1 */}
             <a-plane 
@@ -232,7 +258,7 @@ function App() {
           </>
         )}
         
-        {leftEyeImages.length === 0 && rightEyeImages.length === 0 && (
+        {stereoPairs.length === 0 && (
           <>
             <a-text 
               value="Upload separate left and right eye images to view in 3D"

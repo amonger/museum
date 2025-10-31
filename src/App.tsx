@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [leftEyeImages, setLeftEyeImages] = useState<string[]>(['/l3.JPG'])
-  const [rightEyeImages, setRightEyeImages] = useState<string[]>(['/r3.JPG'])
+  const [leftEyeImages, setLeftEyeImages] = useState<string[]>(['/left.jpeg'])
+  const [rightEyeImages, setRightEyeImages] = useState<string[]>(['right.jpeg'])
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [imageLoaded, setImageLoaded] = useState(false)
 

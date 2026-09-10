@@ -29,7 +29,14 @@ const RAIL_TOP_Y = 0.3
 const WHEEL_RADIUS = 0.35
 const DECK_Y = RAIL_TOP_Y + WHEEL_RADIUS * 2 + 0.09  // deck underside clears the wheel tops
 const BOARD_Y = DECK_Y + 0.09 + 0.325                // side/end boards stand on the deck
-const EYE_Y = DECK_Y + 1.5                           // rider's head above the deck
+const DECK_TOP_Y = DECK_Y + 0.09                      // surface the rider stands on
+// In VR the headset pose overwrites the camera's local position every frame, so any
+// height authored on the camera is discarded. The standing surface therefore lives on
+// the camera's PARENT, which VR leaves alone; the camera's own y is only the desktop
+// stand-in for the height a headset would otherwise report. Head height then lands the
+// eye well above the cart's sides (top edge y=1.83) either way.
+const RIDER_STANCE_Y = DECK_TOP_Y                    // rider stands on the deck
+const DESKTOP_EYE_HEIGHT = 1.6
 
 const museumImageSources = Array.from(
   { length: MUSEUM_IMAGE_COUNT },
@@ -393,7 +400,9 @@ function App() {
               ></a-box>
             ))}
 
-            <a-camera position={`0 ${EYE_Y} 0`}></a-camera>
+            <a-entity id="rider" position={`0 ${RIDER_STANCE_Y} 0`}>
+              <a-camera position={`0 ${DESKTOP_EYE_HEIGHT} 0`}></a-camera>
+            </a-entity>
           </a-entity>
         </a-entity>
 

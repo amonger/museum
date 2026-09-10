@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import './App.css'
 
 interface StereoPair {
@@ -31,7 +31,7 @@ function App() {
             const updateVisibility = () => {
               const mesh = this.el.getObject3D('mesh');
               if (mesh) {
-                if (sceneEl.is('vr-mode')) {
+                if (sceneEl?.is('vr-mode')) {
                   if (eye === 'left') {
                     mesh.layers.set(1);
                   } else if (eye === 'right') {
@@ -44,8 +44,8 @@ function App() {
             };
             
             this.el.addEventListener('object3dset', updateVisibility);
-            sceneEl.addEventListener('enter-vr', updateVisibility);
-            sceneEl.addEventListener('exit-vr', updateVisibility);
+            sceneEl?.addEventListener('enter-vr', updateVisibility);
+            sceneEl?.addEventListener('exit-vr', updateVisibility);
           }
         });
       }
@@ -169,10 +169,10 @@ function App() {
       >
         <a-assets>
           {stereoPairs.map((pair, index) => (
-            <React.Fragment key={index}>
+            <Fragment key={index}>
               {pair.left && <img id={`leftEyeImg${index}`} src={pair.left} onLoad={index === 0 ? handleImageLoad : undefined} />}
               {pair.right && <img id={`rightEyeImg${index}`} src={pair.right} />}
-            </React.Fragment>
+            </Fragment>
           ))}
         </a-assets>
         
@@ -195,7 +195,7 @@ function App() {
               const rotation = isEven ? -45 - (index * 5) : 45 + (index * 5)
               
               return (
-                <React.Fragment key={index}>
+                <Fragment key={index}>
                   {pair.left && (
                     <a-plane 
                       geometry="width: 12; height: 8"
@@ -214,7 +214,7 @@ function App() {
                       eye-filter="eye: right"
                     ></a-plane>
                   )}
-                </React.Fragment>
+                </Fragment>
               )
             })}
             

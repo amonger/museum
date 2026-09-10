@@ -121,25 +121,38 @@ function App() {
           init: function () {
             const eye = this.data.eye;
             const sceneEl = this.el.sceneEl;
-            
+
             const updateVisibility = () => {
               const mesh = this.el.getObject3D('mesh');
-              if (mesh) {
-                if (sceneEl?.is('vr-mode')) {
-                  if (eye === 'left') {
-                    mesh.layers.set(1);
-                  } else if (eye === 'right') {
-                    mesh.layers.set(2);
-                  }
+              if (!mesh) return;
+
+              const inVR = !!sceneEl && sceneEl.is('vr-mode');
+
+              mesh.traverse((node) => {
+                if (inVR) {
+                  // three.js enables layer 1 on the left-eye camera and layer 2 on the
+                  // right, so pinning the mesh to exactly one layer shows that half of
+                  // the stereo card to exactly one eye. That is the stereoscopic effect.
+                  node.layers.set(eye === 'left' ? 1 : eye === 'right' ? 2 : 0);
+                  node.visible = true;
                 } else {
-                  mesh.layers.set(0);
+                  // Outside VR there is only one viewpoint, so show the left half alone;
+                  // otherwise the two co-located planes z-fight.
+                  node.layers.set(0);
+                  node.visible = eye !== 'right';
                 }
-              }
+              });
             };
-            
+
             this.el.addEventListener('object3dset', updateVisibility);
             sceneEl?.addEventListener('enter-vr', updateVisibility);
             sceneEl?.addEventListener('exit-vr', updateVisibility);
+
+            // Components initialise in attribute order, so geometry/material have
+            // already built the mesh and fired object3dset by the time we get here.
+            // Planes created while the headset is *already* in VR would otherwise
+            // never have their layers assigned at all.
+            updateVisibility();
           }
         });
       }
